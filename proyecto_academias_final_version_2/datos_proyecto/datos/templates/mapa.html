@@ -1,0 +1,126 @@
+
+{% load staticfiles %}
+{% block section %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Miguel Herrera, Andrea Córdova">
+    <title>Home | IEEDEF </title>
+  
+    
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/prettyPhoto.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+</head><!--/head-->
+
+<body class="homepage">
+
+    <header id="header">
+
+        <nav class="navbar navbar-inverse" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'datos.views.index' %}"><img src="{% static 'images/logo.png' %}" alt="logo"></a>
+                </div>
+                <div class="collapse navbar-collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li clase="active"><a href="{% url 'datos.views.index' %}">Home</a></li>
+                        <li><a href="{% url 'datos.views.acerca_de' %}">Acerca de</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Datos estadísticos <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'datos.views.reporte' %}">Defunciones Fetales</a></li>
+                                <li><a href="{% url 'datos.views.defunciones_generales' %}">Defunciones Generales</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Estadísticas fetales <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'datos.views.sexo' %}">Sexo </a></li>
+                                <li><a href="{% url 'datos.views.anio_def' %}">Anio defuncion </a></li>
+                                <li><a href="{% url 'datos.views.hijos_nac_muertos' %}">Hijos muertos </a>
+                                <li><a href="{% url 'datos.views.estado_civil' %}">Estado civil madre </a>
+                                <li><a href="{% url 'datos.views.etnia' %}">Etnia madre </a></li>
+                                <li><a href="{% url 'datos.views.provincia' %}">Provincia de defunción </a>
+                                <li><a href="{% url 'datos.views.lugar' %}">Lugar de defunción </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Estadísticas Generales <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'datos.views.sexo2' %}">Sexo </a></li>
+                                <li><a href="{% url 'datos.views.anio_def_gen' %}">Anio defunción </a></li>
+                                <li><a href="{% url 'datos.views.prov_general' %}">Provincia de defunción </a>
+                                <li><a href="{% url 'datos.views.lugar_def_gen' %}">Lugar de defunción </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="{% url 'datos.views.mapa' %}">Mapa </a></li>
+                        </ul>
+                    </ul>
+                </div>
+            </div><!--/.container-->
+        </nav><!--/nav-->
+    
+    </header><!--/header-->
+
+    <section id="main-slider" class="no-margin">
+<br>
+<h1 align="center" aria-expanded="false" tabindex="0">Ubicación de las diversas personas fallecidas en el Ecuador</h1>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp" role="main" aria-expanded="false" tabindex="0" onclick="a()" onkeypress="a()"></script>
+  <style>
+    #map-canvas{
+      height: 550px;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script >
+    function initialize() {
+    var myLatlng = new google.maps.LatLng(-2.524406, -78.929772);
+    var mapOptions = {
+      zoom: 7,
+      center: myLatlng
+    }
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);    
+    {% for personas in animales %}
+      var marcador = new google.maps.LatLng({{personas.latitud}}, {{personas.longitud}});
+      var marker = new google.maps.Marker({
+          position: marcador,
+          map: map,
+          title: '{{personas.edad}}'
+      });
+        google.maps.event.addListener(marker, 'click', function(){
+              var popup = new google.maps.InfoWindow();
+              var note = '<div><h6 style="color:rgb(#000000);">{{personas.edad}}<h6><img src="{{personas.imagen}}" style="width:150px; height:auto; margin-left:10px; border: 1px solid #000000; border-radius:10px;"></div>';
+              popup.setContent(note);
+              popup.open(map, this);
+        })
+    {% endfor %}
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+  </script> 
+
+  <section id="map-canvas"></section>
+{% endblock %}

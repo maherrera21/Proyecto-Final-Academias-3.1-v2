@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block carrusel %}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+           ['Task', 'Número de defunciones'],
+          {% for a in pa %}
+             ['{{a.name}}', {{a.data}}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title:'Porcentaje de lugar en la que se registró la defunción',
+          hAxis: {title: 'Número de defunciones', minValue: 0, maxValue: 15},
+          vAxis: {title: 'Lugar de defunción', minValue: 0, maxValue: 15},
+          legend: 'none',
+          colors: ['#228B22'],
+        };
+
+         var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+ 
+    <div id="chart_div" style="width: 800px; height: 400px;"></div>
+    
+{% endblock %}

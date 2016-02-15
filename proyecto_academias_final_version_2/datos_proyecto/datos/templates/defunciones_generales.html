@@ -1,0 +1,57 @@
+{% extends "base3.html" %}
+
+{% block contenido %}
+
+<p>Datos acerca de Defunciones Generales</p>
+
+<hr/>
+
+<div class="row">
+    <div class="col-md-8">
+        <table id="example" class="table table-striped table-bordered display" cellspacing="0" width="100%">
+            <thead>
+                <tr class=center>
+                    <th>sexo</th>
+                    <th>anio_nac</th>
+                    <th>anio_def</th>
+                    <th>edad</th>
+                </tr>
+            </thead>
+
+            <tbody class="searchable">
+                    {% for p in generales %}
+                        <tr class=center>
+                            <td>{{p.sexo}}</td>
+                            <td>{{p.anio_nac}}</td>
+                            <td>{{p.anio_def}}</td>
+                            <td>{{p.edad}}</td>
+                        </tr>
+                    {% endfor %}
+                
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        console.log('llegando');
+        $('#example tfoot th').each( function () {
+                var title = $('#example thead th').eq( $(this).index() ).text();
+                $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
+            } );
+
+            var table = $('#example').DataTable();
+            
+            // Apply the search
+            table.columns().eq( 0 ).each( function ( colIdx ) {
+                $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+                    table
+                        .column( colIdx )
+                        .search( this.value )
+                        .draw();
+                } );
+            } );      
+    });
+</script> 
+{% endblock %}

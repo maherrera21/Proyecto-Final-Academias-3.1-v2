@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block carrusel %}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+           ['Task', 'Hijos nacidos muertos'],
+          {% for a in pa %}
+             ['{{a.name}}', {{a.data}}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title:'Porcentaje de número de hijos nacidos muertos',
+          vAxis: {title: 'Número de defunciones'},
+          hAxis: {title: 'Hijos muertos'},
+          pieHole: 0.5,
+        };
+
+         var chart = new google.visualization.ComboChart(document.getElementById('combochart'));
+        chart.draw(data, options);
+      }
+    </script>
+ 
+    <div id="combochart" style="width: 900px; height: 500px;"></div>
+    
+{% endblock %}
